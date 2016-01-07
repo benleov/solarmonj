@@ -41,5 +41,6 @@ In order to build this project you will need:
 * Start all three applications.
 * Run bin/jfycron as root to start sending to logstash.
 * Browse to http://localhost:5601 to see your logs.
+* An example Kibana dashboard configuration that can be imported is here: conf/kibana/kibana_dashboard.json
 
 
