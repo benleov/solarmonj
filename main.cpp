@@ -68,7 +68,7 @@ int main(int argc, char** argv)
 
 			string line;
 
-			ifstream cacheFile(CACHE_FILENAME);
+			ifstream cacheFile(CACHE_FILENAME.c_str());
 
 			if (cacheFile.is_open())
 			{
@@ -81,7 +81,7 @@ int main(int argc, char** argv)
 			}
 
 			// Logs have been sent; remove the cache file
-			std::remove(CACHE_FILENAME);
+			std::remove(CACHE_FILENAME.c_str());
 
 
 		}
@@ -91,7 +91,7 @@ int main(int argc, char** argv)
 
 			// write to cache
 			ofstream cacheFile;
-			cacheFile.open(CACHE_FILENAME, ios::out | ios::app);
+			cacheFile.open(CACHE_FILENAME.c_str(), ios::out | ios::app);
 			cacheFile << log;
 			cacheFile.close();
 		}
