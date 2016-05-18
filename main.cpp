@@ -65,7 +65,7 @@ int main(int argc, char** argv)
 
 			client_socket << log;
 
-			std::cout << "Sent\n";
+			// std::cout << log << "Sent\n";
 
 			// Log has been sent; attempt to flush through contents of cache file
 
@@ -75,10 +75,16 @@ int main(int argc, char** argv)
 
 			if (cacheFile.is_open())
 			{
+				int linesSent = 0;
+
 				while (getline(cacheFile,line))
 			    	{
-			      		client_socket << line;
+			      		client_socket << line << "\n";
+					
+					linesSent++;
 			    	}
+
+				cout << "Total lines sent from cache: " << linesSent << "\n";
 
 			    cacheFile.close();
 			}
