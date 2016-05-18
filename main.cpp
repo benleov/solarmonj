@@ -22,7 +22,7 @@ static const string CACHE_FILENAME = "log_cache.txt";
 /**
  * Creates a line of data containing all inverter information to be processed by logstash.
  */
-static string buildLog(Jfy::InverterData* data) 
+static string buildLog(Jfy::InverterData* data)
 {
 	stringstream ss;
 
@@ -47,19 +47,22 @@ int main(int argc, char** argv)
 
 	// Get the data
 	Jfy::InverterData data;
-	conn.readNormalInfo(&data);
+
+	if(!conn.readNormalInfo(&data)) {
+		cerr << "Data not correct. Not sending to logstash.";
+		return 1;
+	}
 
 	// Create log string
 	string log = buildLog(&data);
 
-	// Write to logstash
-
 	try
 	{
-		ClientSocket client_socket(LOGSTASH_HOSTNAME, LOGSTASH_PORT);
-
 		try
 		{
+			// Write to logstash
+			ClientSocket client_socket(LOGSTASH_HOSTNAME, LOGSTASH_PORT);
+
 			client_socket << log;
 
 			std::cout << "Sent\n";
