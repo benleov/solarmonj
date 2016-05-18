@@ -45,8 +45,6 @@ int main(int argc, char** argv)
 		return 1;
 	}
 
-	
-
 	// Get the data
 	Jfy::InverterData data;
 	conn.readNormalInfo(&data);
@@ -74,14 +72,14 @@ int main(int argc, char** argv)
 
 			if (cacheFile.is_open())
 			{
-				while (getline (cacheFile,line))
+				while (getline(cacheFile,line))
 			    	{
 			      		client_socket << line;
 			    	}
 
 			    cacheFile.close();
 			}
-			
+
 			// Logs have been sent; remove the cache file
 			std::remove(CACHE_FILENAME);
 
@@ -98,7 +96,7 @@ int main(int argc, char** argv)
 			cacheFile.close();
 		}
 
-	} 
+	}
 	catch (SocketException& e)
 	{
 		std::cout << "Error connecting to logging server:\n\"" << e.description() << "\"\n";
