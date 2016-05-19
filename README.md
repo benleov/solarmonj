@@ -27,8 +27,8 @@ In order to build this project you will need:
 
 ### Setup
 
-* Run ```{r, engine='bash', count_lines} cmake . ```
-* run ```{r, engine='bash', count_lines}  make  ```
+* Run ``` cmake . ```
+* run ``` make  ```
 * Install [Logstash](https://www.elastic.co/products/logstash)
 * Update /etc/logstash/logstash.conf, placing the contents of conf/logstash/logstash.conf in it.
 * Install [Elastisearch](https://www.elastic.co/products/elasticsearch)
@@ -38,7 +38,7 @@ In order to build this project you will need:
     * device - Which is the device the USB converter is connected to
     * logstashHost - Hostname or IP address of the logstash instance
     * logstashPort - Port of the logstash instance
-* Run ```{r, engine='bash', count_lines} bin/jfycron ``` as root to start sending to logstash.
+* Run ``` bin/jfycron ``` as root to start sending to logstash.
 * Browse to your logstash (e.g http://localhost:5601) to see your logs.
 * An example Kibana dashboard configuration that can be imported is here: conf/kibana/kibana_dashboard.json
 
