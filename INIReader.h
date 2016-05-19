@@ -13,8 +13,7 @@
 
 // Read an INI file into easy-to-access name/value pairs. (Note that I've gone
 // for simplicity here rather than speed, but it should be pretty decent.)
-class INIReader
-{
+class INIReader {
 public:
     // Construct INIReader and parse given filename. See ini.h for more info
     // about the parsing.
@@ -44,10 +43,12 @@ public:
 
 private:
     int _error;
-    std::map<std::string, std::string> _values;
+    std::map <std::string, std::string> _values;
+
     static std::string MakeKey(std::string section, std::string name);
-    static int ValueHandler(void* user, const char* section, const char* name,
-                            const char* value);
+
+    static int ValueHandler(void *user, const char *section, const char *name,
+                            const char *value);
 };
 
 #endif  // __INIREADER_H__

@@ -3,22 +3,23 @@
 
 #include <cstring>
 
-namespace Jfy
-{
-	class PacketData
-	{
-	public:
-		PacketData( size_t size );
-		~PacketData();
+namespace Jfy {
+    class PacketData {
+    public:
+        PacketData(size_t size);
 
-		unsigned char& operator[]( int index );
-		const unsigned char* data() const;
-		size_t size() const;
+        ~PacketData();
 
-	private:
-		size_t _size;
-		unsigned char* _data;
-	};
+        unsigned char &operator[](int index);
+
+        const unsigned char *data() const;
+
+        size_t size() const;
+
+    private:
+        size_t _size;
+        unsigned char *_data;
+    };
 }
 
 #endif // JFYARRAY_H

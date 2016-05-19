@@ -6,24 +6,25 @@
 
 using namespace std;
 
-namespace Jfy
-{
-	class Exception
-	:	public std::exception
-	{
-	public:
-		Exception( const char* what ) throw();
-		Exception( const string& what ) throw();
-		Exception( const Exception& other ) throw();
-		virtual ~Exception() throw();
+namespace Jfy {
+    class Exception
+            : public std::exception {
+    public:
+        Exception(const char *what) throw();
 
-		Exception& operator=( const Exception& other ) throw();
+        Exception(const string &what) throw();
 
-		virtual const char* what() const throw();
+        Exception(const Exception &other) throw();
 
-	private:
-		string _what;
-	};
+        virtual ~Exception() throw();
+
+        Exception &operator=(const Exception &other) throw();
+
+        virtual const char *what() const throw();
+
+    private:
+        string _what;
+    };
 }
 
 #endif // JFYEXCEPTION_H

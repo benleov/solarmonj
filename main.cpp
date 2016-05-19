@@ -23,32 +23,33 @@ static const int DEFAULT_LOGSTASH_PORT = 7022;
 // File that will contain cached jfy data
 static const string JFY_CACHE_FILENAME = "jfy_data_cache.txt";
 static const string JFY_CACHE_TEMP_FILENAME = "jfy_data_cache.tmp";
+
 /**
  * Creates a line of data containing all inverter information to be processed by logstash.
  */
-static string buildLog(Jfy::InverterData* data)
-{
-	stringstream ss;
+static string buildLog(Jfy::InverterData *data) {
+    stringstream ss;
 
-	// Get the current time
-	time_t now = time(0);
+    // Get the current time
+    time_t now = time(0);
 
-	ss << now << "," <<   data->temperature << "," << data->energyCurrent << "," << data->energyToday << "," << data->pvoltageAc << "," << data->voltageDc << "," << data->voltageAc << "," << data->frequency << "," << data->current << "\n";
+    ss << now << "," << data->temperature << "," << data->energyCurrent << "," << data->energyToday << "," <<
+    data->pvoltageAc << "," << data->voltageDc << "," << data->voltageAc << "," << data->frequency << "," <<
+    data->current << "\n";
 
-	return ss.str();
+    return ss.str();
 
 }
 
-int main(int argc, char** argv)
-{
+int main(int argc, char **argv) {
     // Parse configuration from ini file
 
-     INIReader reader(INI_CONFIG_PATH);
+    INIReader reader(INI_CONFIG_PATH);
 
-     if (reader.ParseError() < 0) {
+    if (reader.ParseError() < 0) {
         cerr << "Can't load " << INI_CONFIG_PATH << endl;
         return 1;
-     }
+    }
 
     string jfyDevice = reader.Get("settings", "device", DEFAULT_JFY_DEVICE.c_str());
     string logstashHost = reader.Get("settings", "logstashHost", DEFAULT_LOGSTASH_HOSTNAME.c_str());
@@ -57,27 +58,26 @@ int main(int argc, char** argv)
     cout << "Using device: " << jfyDevice << endl;
     cout << "Sending to logstash: " << logstashHost << ":" << logstashPort << endl;
 
-	Jfy::Connection conn(jfyDevice);
+    Jfy::Connection conn(jfyDevice);
 
-	if ( !conn.init() ) {
-		cerr << "Cannot initialise the connection." << endl;
-		return 1;
-	}
+    if (!conn.init()) {
+        cerr << "Cannot initialise the connection." << endl;
+        return 1;
+    }
 
-	// Get the data
-	Jfy::InverterData data;
+    // Get the data
+    Jfy::InverterData data;
 
     // Ignore invalid data
-	if(!conn.readNormalInfo(&data)) {
-		cerr << "Data not correct. Not sending to logstash.";
-		return 1;
-	}
+    if (!conn.readNormalInfo(&data)) {
+        cerr << "Data not correct. Not sending to logstash.";
+        return 1;
+    }
 
-	// Create log string
-	string log = buildLog(&data);
+    // Create log string
+    string log = buildLog(&data);
 
-    try
-    {
+    try {
         // Write to logstash
         ClientSocket client_socket(logstashHost, logstashPort);
         client_socket << log;
@@ -88,15 +88,12 @@ int main(int argc, char** argv)
 
         ifstream cacheFile(JFY_CACHE_FILENAME.c_str());
 
-        if (cacheFile.is_open())
-        {
+        if (cacheFile.is_open()) {
             int linesSent = 0;
 
-            try
-            {
+            try {
 
-                while (getline(cacheFile,line))
-                {
+                while (getline(cacheFile, line)) {
                     client_socket << line << "\n";
                     linesSent++;
                 }
@@ -106,8 +103,7 @@ int main(int argc, char** argv)
 
                 cout << "All lines sent from cache. Total lines: " << linesSent << endl;
             }
-            catch (SocketException& e)
-            {
+            catch (SocketException &e) {
                 // A socket exception occurred while processing the cached data.
                 // Remove the lines that were sent successfully by copying remaining lines to a temp file,
                 // removing the old file, and renaming temp to original
@@ -119,8 +115,7 @@ int main(int argc, char** argv)
                 int linesMoved = 1;
 
                 // write remaining lines
-                while (getline(cacheFile,line))
-                {
+                while (getline(cacheFile, line)) {
                     tempFile << line << "\n";
                     linesMoved++;
                 }
@@ -133,20 +128,15 @@ int main(int argc, char** argv)
 
                 // rename temp to cache file
                 std::rename(JFY_CACHE_TEMP_FILENAME.c_str(), JFY_CACHE_FILENAME.c_str());
-                cout << "Error occurred resending cache. Total sent:  " << linesSent <<  "Lines remaining: " << linesMoved << "\n";
+                cout << "Error occurred resending cache. Total sent:  " << linesSent << "Lines remaining: " <<
+                linesMoved << "\n";
             }
-
 
 
             cacheFile.close();
         }
-
-
-
-
     }
-    catch (SocketException& e)
-    {
+    catch (SocketException &e) {
         std::cout << "Error writing to logging server:\n\"" << e.description() << "\". Writing log cache file.\n";
 
         // Write to cache
@@ -157,8 +147,8 @@ int main(int argc, char** argv)
     }
 
     // Close connection to jfy device
-	conn.close();
+    conn.close();
 
-	return 0;
+    return 0;
 }
 

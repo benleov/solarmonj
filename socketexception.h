@@ -6,17 +6,17 @@
 
 #include <string>
 
-class SocketException
-{
- public:
-  SocketException ( std::string s ) : m_s ( s ) {};
-  ~SocketException (){};
+class SocketException {
+public:
+    SocketException(std::string s) : m_s(s) { };
 
-  std::string description() { return m_s; }
+    ~SocketException() { };
 
- private:
+    std::string description() { return m_s; }
 
-  std::string m_s;
+private:
+
+    std::string m_s;
 
 };
 
