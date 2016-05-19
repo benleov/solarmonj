@@ -1,15 +1,10 @@
 # solarmonj
-Automatically exported from code.google.com/p/solarmonj By Adam Gray & John Croucher.
+Forked from https://github.com/jcroucher/solarmonj By Adam Gray & John Croucher.
 
-Part of a patch supplied by [GoogleCodeExporter](https://github.com/jcroucher/solarmonj/issues/3) has been applied.
+This project has been extended to send data from an SUNTWINS 5000TL Series Inverter over USB converter  
+to [Logstash](https://www.elastic.co/products/logstash), via a TCP/IP socket.
 
-This project was started to address the lack of Linux software available for monitoring JFY solar inverters ( http://www.jfy-tech.com/ ).
-
-Rather than recreating the full featured Windows software in Linux, we decided to develop a small app which can be run using cron to poll the inverter. From here the data can easily be parsed by other software keeping the actual monitoring code small and simple.
-
-This software has been developed specifically for the Raspberry Pi ( raspberrypi.org ) but it should work in all Linux environments.
-
-This project has been extended to send these logs to [Logstash](https://www.elastic.co/products/logstash), via a TCP/IP socket.
+In addition to this, it can be configured via an ini file and will cache data if Logstash cannot be reached periodically.
 
 ### Example Logstash Dashboard
 
@@ -19,9 +14,9 @@ This project has been extended to send these logs to [Logstash](https://www.elas
 
 To run this project you will need:
 
-* SUNTWINS 5000TL Series Inverter
-* RS232 to USB converter [e.g.](http://www.comsol.com.au/Products-by-Category/USB-Converters/USB2-DB9M-02)
-* Some flavour of Linux
+* [SUNTWINS 5000TL Series Inverter] (http://jfytech.com.au/service/)
+* [RS232 to USB converter] (http://www.comsol.com.au/Products-by-Category/USB-Converters/USB2-DB9M-02)
+* Some flavour of Linux (Tested on Raspberry Pi)
 
 ### Building
 
@@ -32,15 +27,19 @@ In order to build this project you will need:
 
 ### Setup
 
-* Run cmake .
-* run make
+* Run ```{r, engine='bash', count_lines} cmake . ```
+* run ```{r, engine='bash', count_lines}  make  ```
 * Install [Logstash](https://www.elastic.co/products/logstash)
 * Update /etc/logstash/logstash.conf, placing the contents of conf/logstash/logstash.conf in it.
 * Install [Elastisearch](https://www.elastic.co/products/elasticsearch)
 * Install [Kibana](https://www.elastic.co/products/kibana)
-* Start all three applications.
-* Run bin/jfycron as root to start sending to logstash.
-* Browse to http://localhost:5601 to see your logs.
+* Start Logstash, Elastiserch and Kibana.
+* Create an ini file called jfyconfig.ini within the project directory. It supports three parameters within a [settings] section
+    * device - Which is the device the USB converter is connected to
+    * logstashHost - Hostname or IP address of the logstash instance
+    * logstashPort - Port of the logstash instance
+* Run ```{r, engine='bash', count_lines} bin/jfycron ``` as root to start sending to logstash.
+* Browse to your logstash (e.g http://localhost:5601) to see your logs.
 * An example Kibana dashboard configuration that can be imported is here: conf/kibana/kibana_dashboard.json
 
 
