@@ -40,6 +40,6 @@ In order to build this project you will need:
     * logstashPort - Port of the logstash instance
 * Run ``` bin/jfycron ``` as root to start sending to logstash.
 * Browse to your logstash (e.g http://localhost:5601) to see your logs.
-* An example Kibana dashboard configuration that can be imported is here: conf/kibana/kibana_dashboard.json
+* An example Kibana dashboard configuration that can be imported is in the repo: ``` conf/kibana/kibana_dashboard.json ```
 
 
