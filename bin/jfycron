@@ -4,6 +4,7 @@ dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 while true
 do
+ cd $dir/..
  $dir/../libjfy
  sleep 5
 done
